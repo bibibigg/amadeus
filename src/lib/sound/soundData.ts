@@ -1,0 +1,26 @@
+// export const defaultSounds = {
+//   kick: { label: "Kick", soundUrl: "/sounds/kick.wav", color: "red" },
+//   snare: { label: "Snare", soundUrl: "/sounds/snare.wav", color: "blue" },
+//   hihat: { label: "HiHat", soundUrl: "/sounds/hihat.wav", color: "green" },
+//   clap: { label: "Clap", soundUrl: "/sounds/clap.wav", color: "yellow" },
+//   crash: { label: "Crash", soundUrl: "/sounds/crash.wav", color: "purple" },
+//   openhat: {
+//     label: "Open Hat",
+//     soundUrl: "/sounds/openhat.wav",
+//     color: "orange",
+//   },
+//   perc1: { label: "Perc 1", soundUrl: "/sounds/perc1.wav", color: "pink" },
+//   perc2: { label: "Perc 2", soundUrl: "/sounds/perc2.wav", color: "cyan" },
+//   bass: { label: "Bass", soundUrl: "/sounds/bass.wav", color: "indigo" },
+//   lead: { label: "Lead", soundUrl: "/sounds/lead.wav", color: "teal" },
+//   pad: { label: "Pad", soundUrl: "/sounds/pad.wav", color: "lime" },
+//   fx: { label: "FX", soundUrl: "/sounds/fx.wav", color: "amber" },
+//   vocal1: { label: "Vocal 1", soundUrl: "/sounds/vocal1.wav", color: "rose" },
+//   vocal2: { label: "Vocal 2", soundUrl: "/sounds/vocal2.wav", color: "violet" },
+//   synth1: {
+//     label: "Synth 1",
+//     soundUrl: "/sounds/synth1.wav",
+//     color: "emerald",
+//   },
+//   synth2: { label: "Synth 2", soundUrl: "/sounds/synth2.wav", color: "sky" },
+// } as const;
