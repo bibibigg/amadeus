@@ -13,7 +13,13 @@ export default function BeatPad({ padGrid }: BeatPadProps) {
   const [pressedPadButtons, setPressedPadButtons] = useState<Set<string>>(
     new Set()
   );
-  const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
+  // const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
+
+  // AudioContext 전역 생성
+  const audioContextRef = useRef<AudioContext | null>(null);
+
+  // AudioBuffer 저장용
+  const audioBuffersRef = useRef<Record<string, AudioBuffer>>({});
 
   // 업로드 기능 구현 시 uuid를 사용하여 파일 업로드, wav파일만 업로드
 
@@ -29,32 +35,58 @@ export default function BeatPad({ padGrid }: BeatPadProps) {
 
   useEffect(() => {
     const allPads = padGrid.flat();
-    allPads.forEach((pad) => {
-      if (pad.soundUrl && !audioRefs.current[pad.id]) {
-        const audio = new Audio(getSupabaseUrl(pad.soundUrl));
-        audio.preload = "auto";
-        audioRefs.current[pad.id] = audio;
+    // AudioContext 초기화
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext();
+    }
+
+    allPads.forEach(async (pad) => {
+      if (pad.soundUrl && !audioBuffersRef.current[pad.id]) {
+        try {
+          const response = await fetch(getSupabaseUrl(pad.soundUrl));
+          const arrayBuffer = await response.arrayBuffer();
+          const audioBuffer = await audioContextRef.current!.decodeAudioData(
+            arrayBuffer
+          );
+          audioBuffersRef.current[pad.id] = audioBuffer;
+          // const audio = new Audio(getSupabaseUrl(pad.soundUrl));
+          // audio.load(); // 네트워크 요청을 유도
+          // audioRefs.current[pad.id] = audio;
+        } catch (error) {
+          console.log("오디오 로딩 실패", error);
+        }
       }
     });
 
     // 컴포넌트 언마운트 시 오디오 객체 정리
     return () => {
-      Object.values(audioRefs.current).forEach((audio) => {
-        audio.src = "";
-      });
-      audioRefs.current = {};
+      audioBuffersRef.current = {};
+      audioContextRef.current?.close();
+      audioContextRef.current = null;
+      // Object.values(audioRefs.current).forEach((audio) => {
+      //   audio.src = "";
+      // });
+      // audioRefs.current = {};
     };
   }, [padGrid]);
 
   // 사운드 재생 함수
   const playSound = useCallback(async (pad: PadInfo) => {
-    const audio = audioRefs.current[pad.id];
+    const audioContext = audioContextRef.current;
+    const buffer = audioBuffersRef.current[pad.id];
+    // const audio = audioRefs.current[pad.id];
 
-    if (audio) {
+    if (audioContext && buffer) {
       try {
-        audio.currentTime = 0;
-        await audio.play();
+        const source = audioContext.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioContext.destination);
+        source.start(0); // 즉시 재생
         console.log(`Playing sound: ${pad.label}`);
+        // audio.currentTime = 0;
+        // console.log("readyState:", audio.readyState);
+        // await audio.play();
+        // console.log(`Playing sound: ${pad.label}`);
       } catch (error) {
         console.error("사운드 재생 실패:", error);
       }
