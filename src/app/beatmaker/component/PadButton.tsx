@@ -1,7 +1,7 @@
 import { PadInfo } from "@/lib/sound/types";
 
 interface PadButtonProps {
-  pad: PadInfo;
+  // pad: PadInfo;
   rowIndex?: number;
   colIndex?: number;
   isPressed?: boolean;
@@ -9,7 +9,7 @@ interface PadButtonProps {
 }
 
 export default function PadButton({
-  pad,
+  // pad,
   onPlay,
   isPressed = false,
 }: PadButtonProps) {

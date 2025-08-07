@@ -2,11 +2,35 @@
 import BeatPad from "./component/beatPad";
 import { PadGrid } from "@/lib/sound/types";
 import { presetsBySize, initial2x2 } from "@/lib/sound/presets";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function PadPage() {
   const [padSize, setPadSize] = useState(2);
   const [padGrid, setPadGrid] = useState<PadGrid>(initial2x2);
+
+  useEffect(() => {
+    // 로컬스토리지에서 패드 키 설정 불러오기
+    const savedPadKeys = localStorage.getItem("padKeys");
+    if (savedPadKeys) {
+      try {
+        // 로컬스토리지에 저장된 키가 있다면, 해당 키로 패드 설정
+        const padKeys = JSON.parse(savedPadKeys);
+        setPadGrid((prevGrid) =>
+          prevGrid.map((row) =>
+            row.map((pad) => ({
+              ...pad,
+              key: padKeys[pad.id],
+            }))
+          )
+        );
+      } catch (error) {
+        console.error(
+          "로컬스토리지에서 패드 키 설정을 불러오는 중 오류 발생:",
+          error
+        );
+      }
+    }
+  }, []);
 
   // 패드 크기 변경 핸들러
   const handlePadSizeChange = (newSize: 2 | 3 | 4) => {
@@ -39,7 +63,9 @@ export default function PadPage() {
           ))}
         </div>
       </div> */}
-      <BeatPad padGrid={padGrid} />
+      <div className="relative w-full">
+        <BeatPad padGrid={padGrid} />
+      </div>
     </>
   );
 }

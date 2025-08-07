@@ -4,15 +4,21 @@ import { PadGrid, PadInfo } from "@/lib/sound/types";
 import PadButton from "@/app/beatmaker/component/PadButton";
 import { useCallback } from "react";
 import { supabase } from "@/lib/supabase";
+import SettingSideBar from "./SettingSideBar";
 
 type BeatPadProps = {
   padGrid: PadGrid; // string[][]에서 PadGrid로 변경
 };
 
 export default function BeatPad({ padGrid }: BeatPadProps) {
+  //눌린 패드 버튼
   const [pressedPadButtons, setPressedPadButtons] = useState<Set<string>>(
     new Set()
   );
+
+  //사이드 바 상태
+  const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
+
   // const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
 
   // AudioContext 전역 생성
@@ -31,8 +37,7 @@ export default function BeatPad({ padGrid }: BeatPadProps) {
     return data.publicUrl;
   };
 
-  // 오디오 초기화
-
+  // 렌더링 시 초기 비트샘플 로딩
   useEffect(() => {
     const allPads = padGrid.flat();
     // AudioContext 초기화
@@ -149,22 +154,35 @@ export default function BeatPad({ padGrid }: BeatPadProps) {
     gridclass = "grid-cols-4";
   }
 
+  const openSettingsSidebar = () => {
+    setIsSideBarOpen((prev) => !prev);
+  };
+
   return (
-    <div className="flex flex-col mx-auto items-center justify-center aspect-square w-120 md:w-180 bg-[#d63c3c] ">
-      <div className={`grid ${gridclass} gap-4 w-full h-full p-14`}>
-        {padGrid.map((row, rowIndex) =>
-          row.map((pad, colIndex) => (
-            <PadButton
-              key={pad.id}
-              pad={pad}
-              // rowIndex={rowIndex}
-              // colIndex={colIndex}
-              isPressed={pressedPadButtons.has(pad.id)}
-              onPlay={() => playSound(pad)}
-            />
-          ))
-        )}
+    <>
+      {isSideBarOpen && <SettingSideBar padGridData={padGrid} />}
+      <div className="flex flex-col mx-auto items-center justify-center aspect-square w-120 md:w-180 bg-[#d63c3c] ">
+        <div className="w-full flex items-center justify-between bg-white/20 px-6 py-3">
+          <button>테스트 버튼</button>
+          <button>bpm표시부분</button>
+          <button onClick={openSettingsSidebar}>설정버튼</button>
+        </div>
+
+        <div className={`grid ${gridclass} gap-4 w-full h-full p-14`}>
+          {padGrid.map((row, rowIndex) =>
+            row.map((pad, colIndex) => (
+              <PadButton
+                key={pad.id}
+                // pad={pad}
+                // rowIndex={rowIndex}
+                // colIndex={colIndex}
+                isPressed={pressedPadButtons.has(pad.id)}
+                onPlay={() => playSound(pad)}
+              />
+            ))
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
