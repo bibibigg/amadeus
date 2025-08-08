@@ -6,4 +6,4 @@ export interface PadInfo {
   key: string;
 }
 
-export type PadGrid = PadInfo[][];
+export type PadGrid = PadInfo[];

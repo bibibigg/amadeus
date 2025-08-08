@@ -1,16 +1,15 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { PadGrid, PadInfo } from "@/lib/sound/types";
+import { PadInfo } from "@/lib/sound/types";
 import PadButton from "@/app/beatmaker/component/PadButton";
 import { useCallback } from "react";
+import { usePadStore } from "@/store/usePadStore";
 import { supabase } from "@/lib/supabase";
 import SettingSideBar from "./SettingSideBar";
 
-type BeatPadProps = {
-  padGrid: PadGrid; // string[][]에서 PadGrid로 변경
-};
-
-export default function BeatPad({ padGrid }: BeatPadProps) {
+export default function BeatPad() {
+  // 패드 그리드 상태
+  const { padGrid, padSize } = usePadStore();
   //눌린 패드 버튼
   const [pressedPadButtons, setPressedPadButtons] = useState<Set<string>>(
     new Set()
@@ -39,13 +38,12 @@ export default function BeatPad({ padGrid }: BeatPadProps) {
 
   // 렌더링 시 초기 비트샘플 로딩
   useEffect(() => {
-    const allPads = padGrid.flat();
     // AudioContext 초기화
     if (!audioContextRef.current) {
       audioContextRef.current = new AudioContext();
     }
 
-    allPads.forEach(async (pad) => {
+    padGrid.forEach(async (pad) => {
       if (pad.soundUrl && !audioBuffersRef.current[pad.id]) {
         try {
           const response = await fetch(getSupabaseUrl(pad.soundUrl));
@@ -111,7 +109,7 @@ export default function BeatPad({ padGrid }: BeatPadProps) {
       }
 
       const key = event.key.toLowerCase();
-      const foundPad = padGrid.flat().find((pad) => pad.key === key);
+      const foundPad = padGrid.find((pad) => pad.key === key);
 
       if (foundPad) {
         setPressedPadButtons((prev) => new Set([...prev, foundPad.id]));
@@ -124,7 +122,7 @@ export default function BeatPad({ padGrid }: BeatPadProps) {
   const handleKeyUp = useCallback(
     (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
-      const foundPad = padGrid.flat().find((pad) => pad.key === key);
+      const foundPad = padGrid.find((pad) => pad.key === key);
 
       if (foundPad) {
         // 키보드로 눌린 패드 상태 제거
@@ -148,9 +146,9 @@ export default function BeatPad({ padGrid }: BeatPadProps) {
   }, [handleKeyDown, handleKeyUp]);
 
   let gridclass = "grid-cols-2";
-  if (padGrid.length === 3) {
+  if (padSize === 3) {
     gridclass = "grid-cols-3";
-  } else if (padGrid.length === 4) {
+  } else if (padSize === 4) {
     gridclass = "grid-cols-4";
   }
 
@@ -160,7 +158,7 @@ export default function BeatPad({ padGrid }: BeatPadProps) {
 
   return (
     <>
-      {isSideBarOpen && <SettingSideBar padGridData={padGrid} />}
+      {isSideBarOpen && <SettingSideBar />}
       <div className="flex flex-col mx-auto items-center justify-center aspect-square w-120 md:w-180 bg-[#d63c3c] ">
         <div className="w-full flex items-center justify-between bg-white/20 px-6 py-3">
           <button>테스트 버튼</button>
@@ -169,18 +167,13 @@ export default function BeatPad({ padGrid }: BeatPadProps) {
         </div>
 
         <div className={`grid ${gridclass} gap-4 w-full h-full p-14`}>
-          {padGrid.map((row, rowIndex) =>
-            row.map((pad, colIndex) => (
-              <PadButton
-                key={pad.id}
-                // pad={pad}
-                // rowIndex={rowIndex}
-                // colIndex={colIndex}
-                isPressed={pressedPadButtons.has(pad.id)}
-                onPlay={() => playSound(pad)}
-              />
-            ))
-          )}
+          {padGrid.map((pad) => (
+            <PadButton
+              key={pad.id}
+              isPressed={pressedPadButtons.has(pad.id)}
+              onPlay={() => playSound(pad)}
+            />
+          ))}
         </div>
       </div>
     </>

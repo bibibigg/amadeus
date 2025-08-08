@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { PadGrid } from "@/lib/sound/types";
 import { GoArrowLeft } from "react-icons/go";
-import { useForm, useFormState } from "react-hook-form";
+import { usePadStore } from "@/store/usePadStore";
+import { useForm } from "react-hook-form";
 
 type MenuItem = {
   key: string;
@@ -17,12 +17,8 @@ type PadKeyFormData = {
   [padId: string]: string;
 };
 
-export default function SettingSideBar({
-  padGridData,
-}: {
-  padGridData: PadGrid;
-}) {
-  const pads = padGridData.flat();
+export default function SettingSideBar() {
+  const { padGrid, updatePadKeys } = usePadStore();
   const [selectedMenu, setSelectedMenu] = useState<string>("none");
   const {
     register,
@@ -31,12 +27,14 @@ export default function SettingSideBar({
     watch,
     trigger,
   } = useForm<PadKeyFormData>({
-    defaultValues: Object.fromEntries(pads.map((pad) => [pad.id, pad.key])),
+    defaultValues: Object.fromEntries(padGrid.map((pad) => [pad.id, pad.key])),
   });
 
   const onSubmit = (data: PadKeyFormData) => {
     // 로컬스토리지에 저장
     localStorage.setItem("padKeys", JSON.stringify(data));
+    // 패드 키 업데이트
+    updatePadKeys(data);
     //PadGrid 업데이트 redux나 zustand로 관리할 예정
     alert("저장되었습니다!");
   };
@@ -70,7 +68,7 @@ export default function SettingSideBar({
           <div className="space-y-4">
             <GoArrowLeft size={24} onClick={() => setSelectedMenu("none")} />
             <h2 className="text-lg font-bold mb-4">패드 키 설정</h2>
-            {pads.map((pad) => (
+            {padGrid.map((pad) => (
               <div key={pad.id} className="flex flex-col">
                 <label
                   htmlFor={`pad-key-${pad.id}`}
@@ -96,7 +94,7 @@ export default function SettingSideBar({
                     fieldOnChange(e);
 
                     // 모든 필드 다시 검사
-                    await Promise.all(pads.map((p) => trigger(p.id)));
+                    await Promise.all(padGrid.map((p) => trigger(p.id)));
                   }}
                 />
                 {errors[pad.id] && <span>{errors[pad.id]?.message}</span>}
