@@ -18,7 +18,7 @@ type PadKeyFormData = {
 };
 
 export default function SettingSideBar() {
-  const { padGrid, updatePadKeys } = usePadStore();
+  const { padGrid, updatePadKeys, toggleSidebar } = usePadStore();
   const [selectedMenu, setSelectedMenu] = useState<string>("none");
   const {
     register,
@@ -35,7 +35,6 @@ export default function SettingSideBar() {
     localStorage.setItem("padKeys", JSON.stringify(data));
     // 패드 키 업데이트
     updatePadKeys(data);
-    //PadGrid 업데이트 redux나 zustand로 관리할 예정
     alert("저장되었습니다!");
   };
   // 키 중복 검증
@@ -49,17 +48,20 @@ export default function SettingSideBar() {
   return (
     <div className="fixed right-0 top-0 h-full w-100 max-w-xs bg-white shadow-lg p-6 overflow-y-auto">
       {selectedMenu == "none" && (
-        <ul>
-          {MENU_LIST.map((menu) => (
-            <li
-              className="text-lg font-bold mb-4"
-              key={menu.key}
-              onClick={() => setSelectedMenu(menu.key)}
-            >
-              {menu.label}
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-4">
+          <GoArrowLeft size={24} onClick={toggleSidebar} />
+          <ul>
+            {MENU_LIST.map((menu) => (
+              <li
+                className="text-lg font-bold mb-4"
+                key={menu.key}
+                onClick={() => setSelectedMenu(menu.key)}
+              >
+                {menu.label}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
       {/* 패드 키 설정 */}

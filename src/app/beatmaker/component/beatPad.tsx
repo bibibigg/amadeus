@@ -9,16 +9,11 @@ import SettingSideBar from "./SettingSideBar";
 
 export default function BeatPad() {
   // 패드 그리드 상태
-  const { padGrid, padSize } = usePadStore();
+  const { padGrid, padSize, isSidebarOpen, toggleSidebar } = usePadStore();
   //눌린 패드 버튼
   const [pressedPadButtons, setPressedPadButtons] = useState<Set<string>>(
     new Set()
   );
-
-  //사이드 바 상태
-  const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
-
-  // const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
 
   // AudioContext 전역 생성
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -52,9 +47,6 @@ export default function BeatPad() {
             arrayBuffer
           );
           audioBuffersRef.current[pad.id] = audioBuffer;
-          // const audio = new Audio(getSupabaseUrl(pad.soundUrl));
-          // audio.load(); // 네트워크 요청을 유도
-          // audioRefs.current[pad.id] = audio;
         } catch (error) {
           console.log("오디오 로딩 실패", error);
         }
@@ -66,10 +58,6 @@ export default function BeatPad() {
       audioBuffersRef.current = {};
       audioContextRef.current?.close();
       audioContextRef.current = null;
-      // Object.values(audioRefs.current).forEach((audio) => {
-      //   audio.src = "";
-      // });
-      // audioRefs.current = {};
     };
   }, [padGrid]);
 
@@ -77,7 +65,6 @@ export default function BeatPad() {
   const playSound = useCallback(async (pad: PadInfo) => {
     const audioContext = audioContextRef.current;
     const buffer = audioBuffersRef.current[pad.id];
-    // const audio = audioRefs.current[pad.id];
 
     if (audioContext && buffer) {
       try {
@@ -86,10 +73,6 @@ export default function BeatPad() {
         source.connect(audioContext.destination);
         source.start(0); // 즉시 재생
         console.log(`Playing sound: ${pad.label}`);
-        // audio.currentTime = 0;
-        // console.log("readyState:", audio.readyState);
-        // await audio.play();
-        // console.log(`Playing sound: ${pad.label}`);
       } catch (error) {
         console.error("사운드 재생 실패:", error);
       }
@@ -152,18 +135,16 @@ export default function BeatPad() {
     gridclass = "grid-cols-4";
   }
 
-  const openSettingsSidebar = () => {
-    setIsSideBarOpen((prev) => !prev);
-  };
-
   return (
     <>
-      {isSideBarOpen && <SettingSideBar />}
+      {isSidebarOpen && <SettingSideBar />}
       <div className="flex flex-col mx-auto items-center justify-center aspect-square w-120 md:w-180 bg-[#d63c3c] ">
-        <div className="w-full flex items-center justify-between bg-white/20 px-6 py-3">
+        <div className="w-full flex items-center justify-between bg-white/20 px-6 py-4">
           <button>테스트 버튼</button>
-          <button>bpm표시부분</button>
-          <button onClick={openSettingsSidebar}>설정버튼</button>
+          <div className="w-22 bg-black font-digital text-2xl text-center text-green-300">
+            80
+          </div>
+          <button onClick={toggleSidebar}>설정버튼</button>
         </div>
 
         <div className={`grid ${gridclass} gap-4 w-full h-full p-14`}>
