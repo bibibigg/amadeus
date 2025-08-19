@@ -5,10 +5,9 @@ import PadButton from "@/app/beatmaker/component/PadButton";
 import { usePadStore } from "@/store/usePadStore";
 import { FaCaretSquareUp } from "react-icons/fa";
 import { FaCaretSquareDown } from "react-icons/fa";
-import SettingSideBar from "./SettingSideBar";
 // 이름수정
 export default function BeatPad() {
-  const { padGrid, padSize, isSidebarOpen } = usePadStore();
+  const { padGrid, padSize } = usePadStore();
   const { bpm, setBpm, isPlaying, start, stop } = useMetronome(80);
   const { pressedPadButtons, playSound } = useBeatPad(padGrid);
 
@@ -28,11 +27,10 @@ export default function BeatPad() {
 
   return (
     <>
-      {isSidebarOpen && <SettingSideBar />}
       <div className="flex flex-col mx-auto  items-center justify-center aspect-square w-120 md:w-180 bg-[#d63c3c] ">
         <div className=" w-full flex items-center justify-center gap-1 bg-white/20 px-6 py-4">
-          <button>테스트버튼</button>
-          <button className="outline-none" onClick={handleBPMUp}>
+          {/*임시로 ml로 비트표기 가운데로 위치 추후 이곳에 볼륨조절등의 버튼을 위치할것 */}
+          <button className="ml-18 outline-none" onClick={handleBPMUp}>
             <FaCaretSquareUp size={35} />
           </button>
           <div className="w-22 bg-black font-digital text-2xl text-center text-green-300">

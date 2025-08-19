@@ -16,6 +16,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Amadeus",
   description: "Beat-making toy project",
+  icons: "/favicon.ico",
 };
 
 export default function RootLayout({

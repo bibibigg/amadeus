@@ -46,14 +46,14 @@ export default function SettingSideBar() {
     return !otherKeys.includes(value) || "이미 사용 중인 키입니다";
   };
   return (
-    <div className="fixed left-0 top-0 h-full text-white w-100 max-w-xs bg-gray-700 shadow-lg p-6 overflow-y-auto">
+    <div className=" text-white">
       {selectedMenu == "none" && (
         <div className="space-y-4">
           <GoArrowLeft size={24} onClick={toggleSidebar} />
           <ul>
             {MENU_LIST.map((menu) => (
               <li
-                className="text-lg font-bold mb-4"
+                className="text-lg font-bold mb-4 "
                 key={menu.key}
                 onClick={() => setSelectedMenu(menu.key)}
               >

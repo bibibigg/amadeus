@@ -41,6 +41,7 @@ export default function useBeatPad(padGrid: PadInfo[]) {
           );
           audioBuffersRef.current[pad.id] = audioBuffer;
         } catch (error) {
+          alert("오디오 로딩 실패");
           console.log("오디오 로딩 실패", error);
         }
       }
@@ -65,8 +66,8 @@ export default function useBeatPad(padGrid: PadInfo[]) {
         source.buffer = buffer;
         source.connect(audioContext.destination);
         source.start(0); // 즉시 재생
-        console.log(`Playing sound: ${pad.label}`);
       } catch (error) {
+        alert("사운드 재생 실패");
         console.error("사운드 재생 실패:", error);
       }
     }
