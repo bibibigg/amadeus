@@ -10,12 +10,12 @@ interface PadStore {
   setPadGrid: (newGrid: PadGrid) => void;
   resetPadGrid: () => void;
   updatePadKeys: (padKeys: Record<string, string>) => void;
-  isSidebarOpen: boolean;
+  isSettingsOpen: boolean;
   toggleSidebar: () => void;
 }
 
 export const usePadStore = create<PadStore>((set) => ({
-  isSidebarOpen: false,
+  isSettingsOpen: false,
   padGrid: initial2x2,
   initialPadGrid: initial2x2,
   padSize: 2,
@@ -41,5 +41,5 @@ export const usePadStore = create<PadStore>((set) => ({
       })),
     })),
   toggleSidebar: () =>
-    set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+    set((state) => ({ isSettingsOpen: !state.isSettingsOpen })),
 }));
