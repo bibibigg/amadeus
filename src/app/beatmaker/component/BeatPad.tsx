@@ -6,7 +6,7 @@ import { usePadStore } from "@/store/usePadStore";
 import { FaCaretSquareUp } from "react-icons/fa";
 import { FaCaretSquareDown } from "react-icons/fa";
 import SettingSideBar from "./SettingSideBar";
-
+// 이름수정
 export default function BeatPad() {
   const { padGrid, padSize, isSidebarOpen } = usePadStore();
   const { bpm, setBpm, isPlaying, start, stop } = useMetronome(80);
