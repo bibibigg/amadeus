@@ -1,8 +1,7 @@
 "use client";
-import BeatPad from "./component/beatPad";
-import { PadGrid } from "@/lib/sound/types";
-import { presetsBySize, initial2x2 } from "@/lib/sound/presets";
-import { useEffect, useState } from "react";
+import BeatPad from "./component/BeatPad";
+import { presetsBySize } from "@/lib/sound/presets";
+import { useEffect } from "react";
 import { usePadStore } from "@/store/usePadStore";
 
 export default function PadPage() {
@@ -22,13 +21,13 @@ export default function PadPage() {
         );
       }
     }
-  }, []);
+  }, [updatePadKeys]);
 
   // 패드 크기 변경 핸들러
-  const handlePadSizeChange = (newSize: 2 | 3 | 4) => {
-    setPadSize(newSize);
-    setPadGrid(presetsBySize[newSize]);
-  };
+  // const handlePadSizeChange = (newSize: 2 | 3 | 4) => {
+  //   setPadSize(newSize);
+  //   setPadGrid(presetsBySize[newSize]);
+  // };
 
   // const [padSize, setPadSize] = useState(2); // 기본 2x2 패드
   // const [padGrid, setPadGrid] = useState<string[][]>([[]]); // 2차원 배열 초기화
@@ -55,7 +54,7 @@ export default function PadPage() {
           ))}
         </div>
       </div> */}
-      <div className="relative w-full">
+      <div className="w-full">
         <BeatPad />
       </div>
     </>

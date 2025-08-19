@@ -46,7 +46,7 @@ export default function SettingSideBar() {
     return !otherKeys.includes(value) || "이미 사용 중인 키입니다";
   };
   return (
-    <div className="fixed right-0 top-0 h-full w-100 max-w-xs bg-white shadow-lg p-6 overflow-y-auto">
+    <div className="fixed left-0 top-0 h-full text-white w-100 max-w-xs bg-gray-700 shadow-lg p-6 overflow-y-auto">
       {selectedMenu == "none" && (
         <div className="space-y-4">
           <GoArrowLeft size={24} onClick={toggleSidebar} />
@@ -109,18 +109,25 @@ export default function SettingSideBar() {
         </form>
       )}
       {/* 패드 소리 설정 */}
-      {/* {selectedMenu === "sound" && (
-        <div>
-          <p>패드별 소리 설정 UI</p>
-        </div>
-      )} */}
+      {selectedMenu === "sound" && (
+        <form action="">
+          <div className="space-y-4">
+            <GoArrowLeft size={24} onClick={() => setSelectedMenu("none")} />
+            <h2 className="text-lg font-bold mb-4">패드 소리 설정</h2>
+            <p>패드별 소리 설정 UI</p>
+          </div>
+        </form>
+      )}
 
       {/* 패드 테마 설정 */}
-      {/* {selectedMenu === "theme" && (
-        <div>
-          <p>패드 테마 설정 UI</p>
-        </div>
-      )} */}
+      {selectedMenu === "theme" && (
+        <form action="">
+          <div className="space-y-4">
+            <GoArrowLeft size={24} onClick={() => setSelectedMenu("none")} />
+            <h2 className="text-lg font-bold mb-4">패드 테마 설정</h2>
+          </div>
+        </form>
+      )}
     </div>
   );
 }

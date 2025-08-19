@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import NavigationSidebar from "./components/NavigationSidebar";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -24,8 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="min-h-screen flex flex-col ">
-        {/*네비게이션 위치 */}
+      <body className="min-h-screen flex ">
+        <div className="flex">
+          <NavigationSidebar />
+        </div>
         <main className="flex-1 flex flex-col items-center justify-center  bg-[#1e1e1e]">
           {children}
         </main>
