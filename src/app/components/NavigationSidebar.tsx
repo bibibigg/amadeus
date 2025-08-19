@@ -32,6 +32,7 @@ export default function NavigationSidebar() {
                 alt="Amadeus Logo"
                 width={32}
                 height={32}
+                priority
                 className="w-full h-full object-contain"
               />
             </div>
