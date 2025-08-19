@@ -1,5 +1,3 @@
-import { PadInfo } from "@/lib/sound/types";
-
 interface PadButtonProps {
   // pad: PadInfo;
   rowIndex?: number;

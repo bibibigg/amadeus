@@ -1,6 +1,5 @@
 "use client";
 import BeatPad from "./component/BeatPad";
-import { presetsBySize } from "@/lib/sound/presets";
 import { useEffect } from "react";
 import { usePadStore } from "@/store/usePadStore";
 
