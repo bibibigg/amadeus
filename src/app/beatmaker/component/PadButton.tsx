@@ -21,6 +21,7 @@ export default function PadButton({
           active:bg-red-500 active:scale-95 active:brightness-125"
           ${isPressed ? "bg-red-500 scale-95 brightness-125" : ""}
         `}
+        aria-label="pad-button"
       ></button>
     </div>
     // <button className="bg-gray-800 border-4 border-amber-300 aspect-square w-50 p-4"></button>
