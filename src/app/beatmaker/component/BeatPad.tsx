@@ -30,19 +30,27 @@ export default function BeatPad() {
       <div className="flex flex-col mx-auto  items-center justify-center aspect-square w-120 md:w-180 bg-[#d63c3c] ">
         <div className=" w-full flex items-center justify-center gap-1 bg-white/20 px-6 py-4">
           {/*임시로 ml로 비트표기 가운데로 위치 추후 이곳에 볼륨조절등의 버튼을 위치할것 */}
-          <button className="ml-18 outline-none" onClick={handleBPMUp}>
+          <button
+            className="ml-18 outline-none"
+            aria-label="bpmUp"
+            onClick={handleBPMUp}
+          >
             <FaCaretSquareUp size={35} />
           </button>
           <div className="w-22 bg-black font-digital text-2xl text-center text-green-300">
             {bpm}
           </div>
-          <button className="outline-none" onClick={handleBPMDown}>
+          <button
+            className="outline-none"
+            aria-label="bpmDown"
+            onClick={handleBPMDown}
+          >
             <FaCaretSquareDown size={35} />
           </button>
           <button
             onClick={isPlaying ? stop : start}
             className={`ml-4 px-4 py-2 rounded font-medium text-white outline-none transition-colors ${
-              isPlaying ? "bg-red-600 " : "bg-gray-400"
+              isPlaying ? "bg-red-600 " : "bg-gray-500"
             }`}
           >
             {isPlaying ? "중지" : "시작"}
